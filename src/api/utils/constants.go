@@ -1,5 +1,5 @@
 package utils
 
 const (
-	URL_USER = "http://localhost:8082/users/"
+	URL_USER = "http://localhost:8081/users/"
 )

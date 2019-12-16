@@ -37,8 +37,6 @@ func (user *User) Get(password string) *utils.ApiError {
 	req.Header.Set("password", password)
 	response, err := client.Do(req)
 
-	//response, err := http.Get(url)
-
 	if err != nil {
 		return &utils.ApiError{
 			Message: err.Error(),

@@ -19,15 +19,6 @@ func GetUserFromAPI(c *gin.Context) {
 
 	fmt.Println(userID + " " + password)
 
-	//id, err := strconv.ParseInt(userID, 10, 64)
-	//if err != nil {
-	//	apiError := utils.ApiError{
-	//		Message: err.Error(),
-	//		Status:  http.StatusBadRequest,
-	//	}
-	//	c.JSON(apiError.Status, apiError)
-	//}
-
 	response, err2 := user.GetUser(userID, password)
 	if err2 != nil {
 		c.JSON(err2.Status, err2)
