@@ -3,8 +3,7 @@ package user
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/apigotest/src/apigo/utils"
-	localutils "github.com/playlist-grupo5-go/src/api/utils"
+	"github.com/playlist-grupo5-go/src/api/utils"
 	"io/ioutil"
 	"net/http"
 )
@@ -29,7 +28,7 @@ func (user *User) Get(password string) *utils.ApiError {
 		}
 	}
 
-	url := fmt.Sprintf("%s%s", localutils.URL_USER, user.ID)
+	url := fmt.Sprintf("%s%s", utils.URL_USER, user.ID)
 	fmt.Println(url)
 
 	client := &http.Client{}
