@@ -19,9 +19,13 @@ func GetUserFromAPI(c *gin.Context) {
 
 	fmt.Println(userID + " " + password)
 
-	response, err2 := user.GetUser(userID, password)
-	if err2 != nil {
-		c.JSON(err2.Status, err2)
+	response, err := user.GetUser(userID, password)
+	if err != nil {
+		if err.Status == 0 {
+			c.JSON(500, err)
+		} else {
+			c.JSON(err.Status, err)
+		}
 		return
 	}
 

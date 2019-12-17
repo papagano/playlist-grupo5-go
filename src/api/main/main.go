@@ -2,7 +2,7 @@ package main
 
 import (
 	"github.com/gin-gonic/gin"
-	user "github.com/playlist-grupo5-go/src/api/controller"
+	"github.com/playlist-grupo5-go/src/api/controller"
 )
 
 const (
@@ -14,7 +14,17 @@ var (
 )
 
 func main() {
-	router.GET("users/:userID", user.GetUserFromAPI)
+	router.GET("users/:userID", controller.GetUserFromAPI)
 
-	router.Run(port)
+	router.GET("songs/:songID", controller.GetSongFromAPI)
+	router.GET("songs", controller.GetAllSongsFromAPI)
+
+	router.GET("playlists/:playlistID", controller.GetPlaylistFromAPI)
+	router.GET("playlists", controller.GetAllPlaylistsFromAPI)
+
+	_ = router.Run(port)
+
+	/*if err != nil {
+		logger.Error("Couldn't start the server", err)
+	}*/
 }

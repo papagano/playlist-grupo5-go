@@ -29,7 +29,6 @@ func (user *User) Get(password string) *utils.ApiError {
 	}
 
 	url := fmt.Sprintf("%s%s", utils.URL_USER, user.ID)
-	fmt.Println(url)
 
 	client := &http.Client{}
 	req, _ := http.NewRequest("GET", url, nil)
