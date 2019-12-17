@@ -23,6 +23,8 @@ func main() {
 	router.GET("/user/playlists/:userID", controller.GetPlaylistsByUserFromAPI)
 	router.GET("playlists", controller.GetAllPlaylistsFromAPI)
 
+	router.POST("playlists", controller.PostPlaylistOnAPI)
+
 	_ = router.Run(port)
 
 	/*if err != nil {

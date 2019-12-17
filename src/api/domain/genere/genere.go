@@ -1,6 +1,6 @@
-package genre
+package genere
 
-type Genre struct {
+type Genere struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }

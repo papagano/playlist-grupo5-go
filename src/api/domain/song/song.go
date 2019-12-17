@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/playlist-grupo5-go/src/api/domain/artist"
-	"github.com/playlist-grupo5-go/src/api/domain/genre"
+	"github.com/playlist-grupo5-go/src/api/domain/genere"
 	"github.com/playlist-grupo5-go/src/api/utils"
 	"io/ioutil"
 	"net/http"
@@ -13,7 +13,7 @@ import (
 type Song struct {
 	ID     string          `json:"id"`
 	Name   string          `json:"name"`
-	Genere []genre.Genre   `json:"genere"`
+	Genere []genere.Genere `json:"genere"`
 	Artist []artist.Artist `json:"artist"`
 }
 
