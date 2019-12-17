@@ -27,3 +27,15 @@ func GetAllPlaylists() (*playlist.Playlists, *utils.ApiError) {
 
 	return &allPlaylists, nil
 }
+
+func GetPlaylistsByUser(userID string) (*playlist.Playlists, *utils.ApiError) {
+	var allPlaylists *playlist.Playlists
+
+	allPlaylists, err := allPlaylists.GetByUser(userID)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return allPlaylists, nil
+}
