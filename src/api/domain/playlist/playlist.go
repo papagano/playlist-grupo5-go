@@ -10,10 +10,11 @@ import (
 )
 
 type Playlist struct {
-	ID    string     `json:"id"`
-	Name  string     `json:"name"`
-	User  string     `json:"user"`
-	Songs song.Songs `json:"songs"`
+	ID     string     `json:"id"`
+	Name   string     `json:"name"`
+	User   string     `json:"user"`
+	Avatar string     `json:"avatar"`
+	Songs  song.Songs `json:"songs"`
 }
 
 type Playlists []Playlist
