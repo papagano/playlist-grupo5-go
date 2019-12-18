@@ -12,7 +12,6 @@ import (
 
 const (
 	PARAM_PLAYLIST_ID = "playlistID"
-	PARAM_ID          = "id"
 )
 
 func GetPlaylistFromAPI(c *gin.Context) {
@@ -77,9 +76,7 @@ func DeletePlaylistOnApi(c *gin.Context) {
 		return
 	}
 
-	c.JSON(http.StatusOK, struct {
-		status string
-	}{status: "no_content"})
+	c.JSON(http.StatusNoContent, http.NoBody)
 }
 
 func AddSongToPlaylist(c *gin.Context) {

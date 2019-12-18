@@ -41,7 +41,7 @@ func (song *Song) Get() *utils.ApiError {
 		}
 	}
 
-	if response.StatusCode != 200 {
+	if response.StatusCode > 299 {
 		data, _ := ioutil.ReadAll(response.Body)
 		var errResponse utils.ApiError
 		_ = json.Unmarshal(data, &errResponse)
@@ -80,7 +80,7 @@ func (songs *Songs) GetAll() *utils.ApiError {
 		}
 	}
 
-	if response.StatusCode != 200 {
+	if response.StatusCode > 299 {
 		data, _ := ioutil.ReadAll(response.Body)
 		var errResponse utils.ApiError
 		_ = json.Unmarshal(data, &errResponse)

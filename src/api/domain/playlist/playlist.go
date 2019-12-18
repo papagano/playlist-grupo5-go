@@ -49,7 +49,7 @@ func (playlist *Playlist) Get() *utils.ApiError {
 		}
 	}
 
-	if response.StatusCode != 200 {
+	if response.StatusCode > 299 {
 		data, _ := ioutil.ReadAll(response.Body)
 		var errResponse utils.ApiError
 		_ = json.Unmarshal(data, &errResponse)
@@ -91,7 +91,7 @@ func (playlist *Playlist) Save() *utils.ApiError {
 		}
 	}
 
-	if response.StatusCode != 200 {
+	if response.StatusCode > 299 {
 		data, _ := ioutil.ReadAll(response.Body)
 		var errResponse utils.ApiError
 		_ = json.Unmarshal(data, &errResponse)
@@ -116,11 +116,11 @@ func (playlist *Playlist) Save() *utils.ApiError {
 	return nil
 }
 
-func (playlist *Playlist) Delete(id string) *utils.ApiError {
+func (playlist *Playlist) Delete() *utils.ApiError {
 	client := &http.Client{}
 	req, _ := http.NewRequest("DELETE", utils.URL_PLAYLIST, nil)
 	q := req.URL.Query()
-	q.Add("id", id)
+	q.Add("id", playlist.ID)
 	req.URL.RawQuery = q.Encode()
 	response, err := client.Do(req)
 
@@ -131,26 +131,11 @@ func (playlist *Playlist) Delete(id string) *utils.ApiError {
 		}
 	}
 
-	if response.StatusCode != 200 {
+	if response.StatusCode > 299 {
 		data, _ := ioutil.ReadAll(response.Body)
 		var errResponse utils.ApiError
 		_ = json.Unmarshal(data, &errResponse)
 		return &errResponse
-	}
-
-	data, err := ioutil.ReadAll(response.Body)
-	if err != nil {
-		return &utils.ApiError{
-			Message: err.Error(),
-			Status:  http.StatusInternalServerError,
-		}
-	}
-
-	if err := json.Unmarshal(data, &playlist); err != nil {
-		return &utils.ApiError{
-			Message: err.Error(),
-			Status:  http.StatusInternalServerError,
-		}
 	}
 
 	return nil
@@ -161,7 +146,7 @@ func (playlist *Playlist) AddSongToPlaylist(idPlaylist string, idSong string) *u
 	url := fmt.Sprintf(utils.URL_PLAYLIST_ADD_SONG, idPlaylist, idSong)
 	res := rest.Post(url, "")
 
-	if res==nil || res.Response==nil {
+	if res == nil || res.Response == nil {
 		return &utils.ApiError{
 			Message: "Response timeout",
 			Status:  http.StatusInternalServerError,
@@ -200,7 +185,7 @@ func (playlists *Playlists) GetAll() *utils.ApiError {
 		}
 	}
 
-	if response.StatusCode != 200 {
+	if response.StatusCode > 299 {
 		data, _ := ioutil.ReadAll(response.Body)
 		var errResponse utils.ApiError
 		_ = json.Unmarshal(data, &errResponse)
@@ -238,7 +223,7 @@ func (playlists *Playlists) GetByUser(userID string) (*Playlists, *utils.ApiErro
 		}
 	}
 
-	if response.StatusCode != 200 {
+	if response.StatusCode > 299 {
 		data, _ := ioutil.ReadAll(response.Body)
 		var errResponse utils.ApiError
 		_ = json.Unmarshal(data, &errResponse)

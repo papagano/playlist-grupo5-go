@@ -34,7 +34,7 @@ func DeletePlaylist(id string) *utils.ApiError {
 		ID: id,
 	}
 
-	if err := thePlaylist.Get(); err != nil {
+	if err := thePlaylist.Delete(); err != nil {
 		return err
 	}
 
