@@ -18,16 +18,27 @@ func GetPlaylist(id string) (*playlist.Playlist, *utils.ApiError) {
 	return &thePlaylist, nil
 }
 
-func SavePlaylist(body []byte) (*playlist.Playlist, *utils.ApiError) {
-	newPlaylist := playlist.Playlist{}
+func SavePlaylist(newPlaylist *playlist.Playlist) (*playlist.Playlist, *utils.ApiError) {
 
-	err := newPlaylist.Save(body)
+	err := newPlaylist.Save()
 
 	if err != nil {
 		return nil, err
 	}
 
-	return &newPlaylist, nil
+	return newPlaylist, nil
+}
+
+func DeletePlaylist(id string) *utils.ApiError {
+	thePlaylist := playlist.Playlist{
+		ID: id,
+	}
+
+	if err := thePlaylist.Get(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
 func GetAllPlaylists() (*playlist.Playlists, *utils.ApiError) {

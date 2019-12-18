@@ -1,7 +1,9 @@
 package controller
 
 import (
+	"encoding/json"
 	"github.com/gin-gonic/gin"
+	playlistDomain "github.com/playlist-grupo5-go/src/api/domain/playlist"
 	"github.com/playlist-grupo5-go/src/api/services/playlist"
 	"github.com/playlist-grupo5-go/src/api/utils"
 	"io/ioutil"
@@ -10,6 +12,7 @@ import (
 
 const (
 	PARAM_PLAYLIST_ID = "playlistID"
+	PARAM_ID          = "id"
 )
 
 func GetPlaylistFromAPI(c *gin.Context) {
@@ -34,6 +37,12 @@ func PostPlaylistOnAPI(c *gin.Context) {
 
 	defer c.Request.Body.Close()
 
+	var playlistBody playlistDomain.Playlist
+
+	if err := json.Unmarshal(body, &playlistBody); err != nil {
+		return
+	}
+
 	if err != nil {
 		c.JSON(400, utils.ApiError{
 			Message: "Body is missing",
@@ -41,7 +50,7 @@ func PostPlaylistOnAPI(c *gin.Context) {
 		})
 	}
 
-	response, err2 := playlist.SavePlaylist(body)
+	response, err2 := playlist.SavePlaylist(&playlistBody)
 
 	if err2 != nil {
 		if err2.Status == 0 {
@@ -53,6 +62,24 @@ func PostPlaylistOnAPI(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, response)
+}
+
+func DeletePlaylistOnApi(c *gin.Context) {
+	playlistID := c.Param(PARAM_PLAYLIST_ID)
+
+	err := playlist.DeletePlaylist(playlistID)
+	if err != nil {
+		if err.Status == 0 {
+			c.JSON(500, err)
+		} else {
+			c.JSON(err.Status, err)
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, struct {
+		status string
+	}{status: "no_content"})
 }
 
 func GetAllPlaylistsFromAPI(c *gin.Context) {

@@ -11,7 +11,14 @@ import (
 )
 
 type Playlist struct {
-	ID     string     `json:"id"`
+	ID     string     `json:"id,omitempty"`
+	Name   string     `json:"name"`
+	User   string     `json:"user"`
+	Avatar string     `json:"avatar"`
+	Songs  song.Songs `json:"songs"`
+}
+
+type PlaylistPost struct {
 	Name   string     `json:"name"`
 	User   string     `json:"user"`
 	Avatar string     `json:"avatar"`
@@ -66,10 +73,54 @@ func (playlist *Playlist) Get() *utils.ApiError {
 	return nil
 }
 
-func (playlist *Playlist) Save(body []byte) *utils.ApiError {
+func (playlist *Playlist) Save() *utils.ApiError {
+
+	playlist.ID = ""
 
 	client := &http.Client{}
+	body, err := json.Marshal(&playlist)
 	req, _ := http.NewRequest("POST", utils.URL_PLAYLIST, bytes.NewBuffer(body))
+	req.Header.Set("Content-Type", "application/json")
+	response, err := client.Do(req)
+
+	if err != nil {
+		return &utils.ApiError{
+			Message: err.Error(),
+			Status:  http.StatusInternalServerError,
+		}
+	}
+
+	if response.StatusCode != 200 {
+		data, _ := ioutil.ReadAll(response.Body)
+		var errResponse utils.ApiError
+		_ = json.Unmarshal(data, &errResponse)
+		return &errResponse
+	}
+
+	data, err := ioutil.ReadAll(response.Body)
+	if err != nil {
+		return &utils.ApiError{
+			Message: err.Error(),
+			Status:  http.StatusInternalServerError,
+		}
+	}
+
+	if err := json.Unmarshal(data, &playlist); err != nil {
+		return &utils.ApiError{
+			Message: err.Error(),
+			Status:  http.StatusInternalServerError,
+		}
+	}
+
+	return nil
+}
+
+func (playlist *Playlist) Delete(id string) *utils.ApiError {
+	client := &http.Client{}
+	req, _ := http.NewRequest("DELETE", utils.URL_PLAYLIST, nil)
+	q := req.URL.Query()
+	q.Add("id", id)
+	req.URL.RawQuery = q.Encode()
 	response, err := client.Do(req)
 
 	if err != nil {
