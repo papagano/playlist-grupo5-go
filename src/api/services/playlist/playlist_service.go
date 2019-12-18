@@ -30,6 +30,18 @@ func SavePlaylist(body []byte) (*playlist.Playlist, *utils.ApiError) {
 	return &newPlaylist, nil
 }
 
+func AddSongToPlaylist(idPlaylist string, idSong string) (*playlist.Playlist, *utils.ApiError) {
+	newPlaylist := playlist.Playlist{}
+
+	err := newPlaylist.AddSongToPlaylist(idPlaylist, idSong)
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &newPlaylist, nil
+}
+
 func GetAllPlaylists() (*playlist.Playlists, *utils.ApiError) {
 	allPlaylists := playlist.Playlists{}
 

@@ -24,6 +24,7 @@ func main() {
 	router.GET("playlists", controller.GetAllPlaylistsFromAPI)
 
 	router.POST("playlists", controller.PostPlaylistOnAPI)
+	router.POST("playlists/:idPlaylist", controller.AddSongToPlaylist)
 
 	_ = router.Run(port)
 

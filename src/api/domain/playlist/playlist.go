@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/mercadolibre/go-meli-toolkit/restful/rest"
 	"github.com/playlist-grupo5-go/src/api/domain/song"
 	"github.com/playlist-grupo5-go/src/api/utils"
 	"io/ioutil"
@@ -95,6 +96,37 @@ func (playlist *Playlist) Save(body []byte) *utils.ApiError {
 	}
 
 	if err := json.Unmarshal(data, &playlist); err != nil {
+		return &utils.ApiError{
+			Message: err.Error(),
+			Status:  http.StatusInternalServerError,
+		}
+	}
+
+	return nil
+}
+
+func (playlist *Playlist) AddSongToPlaylist(idPlaylist string, idSong string) *utils.ApiError {
+
+	url := fmt.Sprintf(utils.URL_PLAYLIST_ADD_SONG, idPlaylist, idSong)
+	res := rest.Post(url, "")
+
+	if res==nil || res.Response==nil {
+		return &utils.ApiError{
+			Message: "Response timeout",
+			Status:  http.StatusInternalServerError,
+		}
+
+	}
+
+	if res.StatusCode != 200 {
+		data, _ := ioutil.ReadAll(res.Body)
+		var errResponse utils.ApiError
+		_ = json.Unmarshal(data, &errResponse)
+		errResponse.Status = res.StatusCode
+		return &errResponse
+	}
+
+	if err := json.Unmarshal(res.Bytes(), &playlist); err != nil {
 		return &utils.ApiError{
 			Message: err.Error(),
 			Status:  http.StatusInternalServerError,
