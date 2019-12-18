@@ -82,6 +82,25 @@ func DeletePlaylistOnApi(c *gin.Context) {
 	}{status: "no_content"})
 }
 
+func AddSongToPlaylist(c *gin.Context) {
+
+	idPlaylist := c.Param("idPlaylist")
+	idSong := c.GetHeader("idSong")
+
+	response, err2 := playlist.AddSongToPlaylist(idPlaylist, idSong)
+
+	if err2 != nil {
+		if err2.Status == 0 {
+			c.JSON(500, err2)
+		} else {
+			c.JSON(err2.Status, err2)
+		}
+		return
+	}
+
+	c.JSON(http.StatusOK, response)
+}
+
 func GetAllPlaylistsFromAPI(c *gin.Context) {
 	response, err := playlist.GetAllPlaylists()
 	if err != nil {
