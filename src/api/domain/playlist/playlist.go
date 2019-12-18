@@ -172,6 +172,30 @@ func (playlist *Playlist) AddSongToPlaylist(idPlaylist string, idSong string) *u
 	return nil
 }
 
+func (playlist *Playlist) DeleteSongToPlaylist(idPlaylist string, idSong string) *utils.ApiError {
+
+	url := fmt.Sprintf(utils.URL_PLAYLIST_ADD_SONG, idPlaylist, idSong)
+	res := rest.Delete(url)
+
+	if res == nil || res.Response == nil {
+		return &utils.ApiError{
+			Message: "Response timeout",
+			Status:  http.StatusInternalServerError,
+		}
+
+	}
+
+	if res.StatusCode != 204 {
+		data, _ := ioutil.ReadAll(res.Body)
+		var errResponse utils.ApiError
+		_ = json.Unmarshal(data, &errResponse)
+		errResponse.Status = res.StatusCode
+		return &errResponse
+	}
+
+	return nil
+}
+
 func (playlists *Playlists) GetAll() *utils.ApiError {
 
 	client := &http.Client{}

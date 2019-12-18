@@ -1,6 +1,8 @@
 package playlist
 
 import (
+	"fmt"
+	"github.com/mercadolibre/go-meli-toolkit/goutils/logger"
 	"github.com/playlist-grupo5-go/src/api/domain/playlist"
 	"github.com/playlist-grupo5-go/src/api/utils"
 )
@@ -51,6 +53,20 @@ func AddSongToPlaylist(idPlaylist string, idSong string) (*playlist.Playlist, *u
 	}
 
 	return &newPlaylist, nil
+}
+
+func DeleteSongOnPlaylist(idPlaylist string, idSong string) (*string, *utils.ApiError) {
+	newPlaylist := playlist.Playlist{}
+
+	err := newPlaylist.DeleteSongToPlaylist(idPlaylist, idSong)
+
+	if err != nil {
+		return nil, err
+	}
+
+	s := fmt.Sprintf("SONG %s DELETED FROM PLAYLIST %s", idSong, idPlaylist)
+	logger.Info(s)
+	return &s, &utils.ApiError{}
 }
 
 func GetAllPlaylists() (*playlist.Playlists, *utils.ApiError) {

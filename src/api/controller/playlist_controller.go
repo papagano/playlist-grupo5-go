@@ -63,20 +63,39 @@ func PostPlaylistOnAPI(c *gin.Context) {
 	c.JSON(http.StatusOK, response)
 }
 
-func DeletePlaylistOnApi(c *gin.Context) {
-	playlistID := c.Param(PARAM_PLAYLIST_ID)
+func DeleteSongOnPlaylistAPI(c *gin.Context, idPlaylist string, idSong string) {
 
-	err := playlist.DeletePlaylist(playlistID)
-	if err != nil {
-		if err.Status == 0 {
-			c.JSON(500, err)
-		} else {
-			c.JSON(err.Status, err)
+	response, err2 := playlist.DeleteSongOnPlaylist(idPlaylist, idSong)
+
+	if err2 == nil {
+		{
+			c.JSON(500, err2)
 		}
 		return
 	}
 
-	c.JSON(http.StatusNoContent, http.NoBody)
+	c.JSON(http.StatusNoContent, response)
+}
+
+func DeletePlaylistOnApi(c *gin.Context) {
+	playlistID := c.Param(PARAM_PLAYLIST_ID)
+	idSong := c.GetHeader("idSong")
+	if idSong != "" {
+		DeleteSongOnPlaylistAPI(c, playlistID, idSong)
+	} else {
+		err := playlist.DeletePlaylist(playlistID)
+		if err != nil {
+			if err.Status == 0 {
+				c.JSON(500, err)
+			} else {
+				c.JSON(err.Status, err)
+			}
+			return
+		}
+
+		c.JSON(http.StatusNoContent, http.NoBody)
+	}
+
 }
 
 func AddSongToPlaylist(c *gin.Context) {
